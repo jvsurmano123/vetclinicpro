@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  clinic        Clinic?   @relation(fields: [clinicId], references: [id])
+  clinicId      String?
+  appointments  Appointment[]
+}
+
+model Clinic {
+  id          String    @id @default(cuid())
+  name        String
+  address     String?
+  phone       String?
+  email       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  users       User[]
+  patients    Patient[]
+  appointments Appointment[]
+  subscription Subscription?
+}
+
+model Patient {
+  id            String    @id @default(cuid())
+  name          String
+  species       String
+  breed         String?
+  birthDate     DateTime?
+  weight        Float?
+  ownerName     String
+  ownerPhone    String
+  ownerEmail    String?
+  clinic        Clinic    @relation(fields: [clinicId], references: [id])
+  clinicId      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  appointments  Appointment[]
+  medicalRecords MedicalRecord[]
+}
+
+model Appointment {
+  id          String    @id @default(cuid())
+  date        DateTime
+  type        AppointmentType
+  status      AppointmentStatus @default(SCHEDULED)
+  notes       String?
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  patientId   String
+  clinic      Clinic    @relation(fields: [clinicId], references: [id])
+  clinicId    String
+  veterinarian User     @relation(fields: [vetId], references: [id])
+  vetId       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model MedicalRecord {
+  id          String    @id @default(cuid())
+  date        DateTime  @default(now())
+  diagnosis   String?
+  treatment   String?
+  prescription String?
+  notes       String?
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  patientId   String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Subscription {
+  id          String    @id @default(cuid())
+  status      SubscriptionStatus
+  planId      String
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
+  clinic      Clinic    @relation(fields: [clinicId], references: [id])
+  clinicId    String    @unique
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum Role {
+  ADMIN
+  VETERINARIAN
+  RECEPTIONIST
+  USER
+}
+
+enum AppointmentType {
+  CONSULTATION
+  VACCINATION
+  SURGERY
+  CHECKUP
+  EMERGENCY
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+  UNPAID
+  TRIAL
+}

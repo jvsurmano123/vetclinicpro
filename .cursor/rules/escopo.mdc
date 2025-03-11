@@ -1,0 +1,138 @@
+---
+description: all tasks
+globs: 
+alwaysApply: true
+---
+``
+Descrição do Projeto: VetClinicPro - SaaS para Gestão de Clínicas Veterinárias
+1. Visão Geral
+VetClinicPro é um Software as a Service (SaaS) completo e funcional projetado para otimizar a gestão de clínicas veterinárias. O sistema oferece uma solução abrangente para administração de pacientes, agendamentos, histórico médico, faturamento e inventário, tudo em uma única plataforma intuitiva e eficiente.
+2. Público-Alvo
+
+Clínicas veterinárias de pequeno e médio porte
+Hospitais veterinários
+Profissionais veterinários autônomos
+
+3. Principais Funcionalidades
+3.1 Gestão de Pacientes
+
+Cadastro de animais com informações detalhadas (espécie, raça, idade, peso, etc.)
+Histórico médico completo
+Registro de vacinas e tratamentos
+Anexo de exames e documentos
+
+3.2 Agendamento
+
+Calendário interativo para marcação de consultas e procedimentos
+Sistema de lembretes automáticos via e-mail e SMS
+Gerenciamento de disponibilidade de veterinários
+
+3.3 Prontuário Eletrônico
+
+Registro de consultas e procedimentos
+Prescrição digital de medicamentos
+Acompanhamento de tratamentos em andamento
+
+3.4 Faturamento e Financeiro
+
+Geração de faturas e recibos
+Integração com sistemas de pagamento online
+Relatórios financeiros detalhados
+
+3.5 Gestão de Estoque
+
+Controle de inventário de medicamentos e suprimentos
+Alertas de estoque baixo
+Pedidos automáticos para reposição
+
+3.6 Comunicação com Clientes
+
+Portal do cliente para acesso a informações do pet
+Sistema de notificações para retornos e check-ups
+
+3.7 Relatórios e Analytics
+
+Dashboards personalizáveis
+Relatórios de desempenho da clínica
+Análise de tendências de saúde animal
+
+4. Arquitetura Técnica
+4.1 Front-end
+
+Framework: Next.js (versão mais recente)
+Linguagem: TypeScript
+Estilização: Tailwind CSS
+Gerenciamento de Estado: React Query
+
+4.2 Back-end
+
+API: Next.js API Routes
+Autenticação: NextAuth.js
+
+4.3 Banco de Dados
+
+Tipo: SQLite (para desenvolvimento local e deploy simples)
+ORM: Prisma
+
+4.4 Hospedagem e Deploy
+
+Plataforma: Vercel
+
+5. Requisitos Técnicos Específicos
+5.1 Responsividade
+
+Design responsivo para funcionar em desktops, tablets e smartphones
+
+5.2 Performance
+
+Tempo de carregamento da página inicial < 2 segundos
+Otimização de imagens e assets
+
+5.3 Segurança
+
+Implementação de HTTPS
+Proteção contra CSRF, XSS e SQL Injection
+Criptografia de dados sensíveis no banco de dados
+
+5.4 Escalabilidade
+
+Arquitetura preparada para crescimento do número de usuários
+Otimização de consultas ao banco de dados
+
+5.5 Integração
+
+API RESTful para possível integração com outros sistemas
+
+6. User Stories Principais
+
+Como veterinário, quero poder cadastrar um novo paciente animal com todos os detalhes relevantes.
+Como recepcionista, quero agendar consultas de forma rápida e eficiente, visualizando a disponibilidade dos veterinários.
+Como administrador da clínica, quero gerar relatórios financeiros mensais para análise de desempenho.
+Como cliente, quero poder ver o histórico médico do meu pet e receber lembretes de consultas.
+Como veterinário, quero poder prescrever medicamentos digitalmente e que isso atualize automaticamente o estoque.
+
+7. Fluxo de Desenvolvimento
+
+1. Setup inicial do projeto com Next.js e configuração do ambiente de desenvolvimento
+Implementação do sistema de autenticação e autorização
+Desenvolvimento do módulo de gestão de pacientes
+Criação do sistema de agendamento
+Implementação do prontuário eletrônico
+Desenvolvimento do módulo financeiro e faturamento
+Criação do sistema de gestão de estoque
+Implementação das funcionalidades de comunicação com clientes
+Desenvolvimento dos relatórios e analytics
+Testes extensivos e correção de bugs
+Otimização de performance e segurança
+Preparação para deploy e lançamento
+
+8. Considerações Adicionais
+
+O sistema deve ser desenvolvido com foco na facilidade de uso, considerando que nem todos os usuários serão tecnicamente experientes.
+A interface deve ser limpa e intuitiva, priorizando a eficiência nas tarefas diárias da clínica.
+O banco de dados SQLite deve ser configurado para fácil migração para um sistema mais robusto no futuro, se necessário.
+Todas as funcionalidades devem ser desenvolvidas considerando as melhores práticas de UX/UI para aplicações médicas.
+
+
+Esta descrição detalhada do projeto VetClinicPro serve como um guia abrangente para o desenvolvimento do SaaS de gestão de clínicas veterinárias. Ela fornece um contexto claro e diretrizes específicas para cada aspecto do sistema, desde funcionalidades até requisitos técnicos.
+O Cursor IDE deve usar esta descrição como referência constante durante todo o processo de desenvolvimento, assegurando que cada feature implementada esteja alinhada com a visão geral do projeto e atenda às necessidades específicas do público-alvo.

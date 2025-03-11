@@ -1,0 +1,191 @@
+---
+description: all tasks
+globs: 
+alwaysApply: true
+---
+
+src/
+│
+├── pages/
+│   ├── index.tsx                 # Landing page pública
+│   ├── pricing.tsx               # Página de planos e preços
+│   ├── login.tsx                 # Página de login
+│   ├── register.tsx              # Página de registro
+│   ├── forgot-password.tsx       # Recuperação de senha
+│   ├── _app.tsx                  # Componente App customizado
+│   ├── _document.tsx             # Documento HTML customizado
+│   │
+│   ├── app/                      # Área protegida (requer assinatura)
+│   │   ├── dashboard.tsx         # Dashboard principal após login
+│   │   │
+│   │   ├── patients/
+│   │   │   ├── index.tsx         # Lista de pacientes
+│   │   │   ├── [id].tsx          # Detalhes do paciente
+│   │   │   └── new.tsx           # Formulário para novo paciente
+│   │   │
+│   │   ├── appointments/
+│   │   │   ├── index.tsx         # Calendário de agendamentos
+│   │   │   ├── [id].tsx          # Detalhes do agendamento
+│   │   │   └── new.tsx           # Formulário para novo agendamento
+│   │   │
+│   │   ├── medical-records/
+│   │   │   ├── index.tsx         # Lista de prontuários
+│   │   │   └── [id].tsx          # Detalhes do prontuário
+│   │   │
+│   │   ├── inventory/
+│   │   │   ├── index.tsx         # Gestão de estoque
+│   │   │   └── [id].tsx          # Detalhes do item de estoque
+│   │   │
+│   │   ├── billing/
+│   │   │   ├── index.tsx         # Visão geral de faturamento
+│   │   │   ├── invoices.tsx      # Lista de faturas
+│   │   │   └── [id].tsx          # Detalhes da fatura
+│   │   │
+│   │   ├── reports/
+│   │   │   ├── index.tsx         # Página principal de relatórios
+│   │   │   ├── financial.tsx     # Relatórios financeiros
+│   │   │   └── clinical.tsx      # Relatórios clínicos
+│   │   │
+│   │   └── settings/
+│   │       ├── index.tsx         # Configurações gerais
+│   │       ├── profile.tsx       # Perfil do usuário
+│   │       ├── clinic.tsx        # Configurações da clínica
+│   │       └── subscription.tsx  # Gerenciamento de assinatura
+│   │
+│   └── api/                      # API routes
+│       ├── auth/
+│       │   ├── [...nextauth].ts  # Configuração do NextAuth.js
+│       │   └── register.ts       # Registro de novos usuários
+│       │
+│       ├── webhook/
+│       │   └── stripe.ts         # Webhook para eventos do Stripe
+│       │
+│       ├── subscription/
+│       │   ├── create.ts         # Criar nova assinatura
+│       │   ├── update.ts         # Atualizar assinatura
+│       │   └── cancel.ts         # Cancelar assinatura
+│       │
+│       └── [outras APIs protegidas]
+│
+├── components/
+│   ├── layout/
+│   │   ├── PublicLayout.tsx      # Layout para páginas públicas
+│   │   ├── AppLayout.tsx         # Layout para área protegida
+│   │   ├── Sidebar.tsx           # Barra lateral de navegação
+│   │   ├── Header.tsx            # Cabeçalho
+│   │   └── Footer.tsx            # Rodapé
+│   │
+│   ├── subscription/
+│   │   ├── PlanCard.tsx          # Card de plano de assinatura
+│   │   ├── SubscriptionForm.tsx  # Formulário de assinatura
+│   │   └── PaymentModal.tsx      # Modal de pagamento
+│   │
+│   [outros componentes como antes]
+│
+├── hooks/
+│   ├── useAuth.ts                # Hook para autenticação
+│   ├── useSubscription.ts        # Hook para gerenciar assinatura
+│   [outros hooks como antes]
+│
+├── contexts/
+│   ├── AuthContext.tsx           # Contexto de autenticação
+│   └── SubscriptionContext.tsx   # Contexto de assinatura
+│
+├── lib/
+│   ├── prisma.ts                 # Cliente Prisma
+│   ├── auth.ts                   # Configurações de autenticação
+│   └── stripe.ts                 # Configuração e helpers do Stripe
+│
+├── utils/
+│   ├── withAuth.ts               # HOC para proteger rotas
+│   ├── withSubscription.ts       # HOC para verificar assinatura ativa
+│   [outros utilitários como antes]
+│
+└── types/
+    ├── subscription.ts           # Tipos para assinaturas
+    ├── plan.ts                   # Tipos para planos de assinatura
+    [outros tipos como antes]
+
+Principais mudanças e adições:
+
+
+
+1. Estrutura de Páginas:
+
+
+
+
+Páginas públicas (landing, pricing, login, register) fora da pasta app/.
+Área protegida dentro de app/, que requer autenticação e assinatura ativa.
+
+2. API Routes:
+
+
+
+- Adicionadas rotas para autenticação, webhook do Stripe, e gerenciamento de assinaturas.
+
+
+
+3. Componentes de Assinatura:
+
+
+
+- Novos componentes para exibir planos, formulário de assinatura e modal de pagamento.
+
+
+
+4. Hooks e Contextos:
+
+
+
+- Adicionado useSubscription hook e SubscriptionContext para gerenciar o estado da assinatura.
+
+
+
+5. Utilitários:
+
+
+
+- withAuth e withSubscription para proteger rotas e verificar assinaturas ativas.
+
+
+
+6. Configuração do Stripe:
+
+
+
+- Arquivo stripe.ts para configuração e helpers relacionados ao Stripe.
+
+
+
+7. Tipos:
+
+
+
+- Adicionados tipos para assinaturas e planos.
+
+
+
+8. Página de Gerenciamento de Assinatura:
+
+
+
+- Adicionada em settings/subscription.tsx para que os usuários possam gerenciar suas assinaturas.
+
+
+
+Esta estrutura suporta um modelo SaaS baseado em assinaturas, com:
+
+
+
+- Clara separação entre conteúdo público e protegido.
+
+
+
+
+Integração com sistema de pagamentos (Stripe neste exemplo).
+Gerenciamento de assinaturas e acesso baseado no status da assinatura.
+Flexibilidade para adicionar diferentes níveis de acesso baseados em planos.
+
+Lembre-se de implementar a lógica de verificação de assinatura em _app.tsx ou usando middleware do Next.js para garantir que apenas usuários com assinaturas ativas possam acessar as rotas protegidas.
+Esta estrutura fornece uma base sólida para o Cursor IDE desenvolver o VetClinicPro como um SaaS com modelo de assinatura, mantendo a organização e escalabilidade do projeto.
