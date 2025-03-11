@@ -1,0 +1,74 @@
+---
+description: Quando for desenvolver a dashboar
+globs: 
+alwaysApply: true
+---
+Analisando o contexto do VetClinicPro como um sistema de gestão para clínicas veterinárias, vou descrever como deveria ser a página de dashboard:
+1. Seção Superior - Métricas Principais
+Total de Pacientes Ativos
+Consultas Agendadas para Hoje
+Faturamento do Mês
+Taxa de Ocupação da Clínica
+2. Seção de Alertas e Notificações
+Medicamentos com estoque baixo
+Vacinas que precisam ser renovadas
+Retornos pendentes de pacientes
+Exames que precisam ser revisados
+3. Agenda do Dia
+Visualização rápida das próximas consultas
+Status (confirmada, em espera, em andamento)
+Informações básicas do pet e tutor
+Tipo de atendimento
+4. Indicadores de Performance
+Gráfico de atendimentos realizados (últimos 30 dias)
+Taxa de retorno de pacientes
+Satisfação dos clientes
+Procedimentos mais realizados
+5. Gestão Financeira Rápida
+Receitas vs Despesas (gráfico)
+Pagamentos pendentes
+Faturamento previsto
+Consultas canceladas
+6. Monitoramento de Estoque
+Produtos mais utilizados
+Alertas de vencimento
+Necessidade de reposição
+Valor em estoque
+7. Ações Rápidas
+Novo agendamento
+Registrar paciente
+Iniciar atendimento
+Emitir receita
+Registrar pagamento
+8. Lista de Tarefas Pendentes
+Retornos a serem agendados
+Exames a serem analisados
+Prescrições a serem renovadas
+Vacinas a serem aplicadas
+Lógica de Funcionamento:
+Dados em tempo real sincronizados com o banco
+Filtros por período (hoje, semana, mês)
+Personalização de visualização por perfil de usuário
+Sistema de cores para status e prioridades
+Atualizações automáticas sem refresh
+Experiência do Usuário:
+Interface limpa e organizada
+Informações mais importantes em destaque
+Navegação intuitiva
+Ações principais acessíveis com poucos cliques
+Alertas visuais para situações críticas
+Responsividade para diferentes dispositivos
+Personalização por Perfil:
+Veterinário:
+Foco em agenda e pacientes
+Histórico clínico rápido
+Prescrições pendentes
+Recepcionista:
+Foco em agendamentos
+Pagamentos pendentes
+Cadastro de pacientes
+Administrador:
+Visão completa
+Métricas financeiras
+Indicadores de performance
+Esta estrutura forneceria uma visão completa e funcional da operação da clínica, permitindo tomada de decisões rápida e eficiente gestão do dia a dia.

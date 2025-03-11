@@ -22,57 +22,86 @@ ChartJS.register(
   Filler
 );
 
-const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+interface LineChartProps {
+  data: number[];
+  labels: string[];
+}
 
-export function LineChart() {
+export function LineChart({ data, labels }: LineChartProps) {
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Atendimentos',
+        data: data,
+        borderColor: 'rgb(99, 102, 241)',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        tension: 0.4,
+        fill: true
+      }
+    ]
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        display: false
       },
+      tooltip: {
+        mode: 'index' as const,
+        intersect: false,
+        backgroundColor: 'rgb(255, 255, 255)',
+        titleColor: 'rgb(17, 24, 39)',
+        bodyColor: 'rgb(107, 114, 128)',
+        borderColor: 'rgb(229, 231, 235)',
+        borderWidth: 1,
+        padding: 12,
+        boxPadding: 6,
+        usePointStyle: true,
+        callbacks: {
+          title: (context: any) => {
+            return context[0].label;
+          },
+          label: (context: any) => {
+            return `${context.parsed.y} atendimentos`;
+          }
+        }
+      }
     },
     scales: {
       x: {
         grid: {
-          display: false,
+          display: false
         },
+        ticks: {
+          font: {
+            size: 12
+          },
+          color: 'rgb(107, 114, 128)'
+        }
       },
       y: {
         beginAtZero: true,
         grid: {
-          color: '#f3f4f6',
+          color: 'rgb(243, 244, 246)'
         },
-      },
+        ticks: {
+          font: {
+            size: 12
+          },
+          color: 'rgb(107, 114, 128)',
+          callback: (value: number) => value
+        }
+      }
     },
+    interaction: {
+      mode: 'nearest' as const,
+      axis: 'x' as const,
+      intersect: false
+    }
   };
 
-  const data = {
-    labels: months,
-    datasets: [
-      {
-        label: 'Novos Clientes',
-        data: [300, 400, 350, 500, 450, 600, 550, 650, 600, 700, 650, 800],
-        borderColor: '#6366f1',
-        backgroundColor: 'rgba(99, 102, 241, 0.1)',
-        tension: 0.4,
-        fill: true,
-      },
-      {
-        label: 'Clientes Antigos',
-        data: [200, 300, 250, 400, 350, 500, 450, 550, 500, 600, 550, 700],
-        borderColor: '#e11d48',
-        backgroundColor: 'rgba(225, 29, 72, 0.1)',
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  };
-
-  return (
-    <div className="h-full w-full">
-      <Line options={options} data={data} />
-    </div>
-  );
+  return <Line data={chartData} options={options} />;
 } 

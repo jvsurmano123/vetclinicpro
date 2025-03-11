@@ -3,6 +3,7 @@ import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { authOptions } from '@/lib/auth';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -70,4 +71,5 @@ export const authOptions: AuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST }; 
