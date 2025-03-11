@@ -60,7 +60,7 @@ export default function LoginPage() {
             <div>
               <Input
                 type="email"
-                placeholder="audrey_weimann@anissa.org"
+                placeholder="Email"
                 autoComplete="email"
                 error={errors.email?.message}
                 {...register('email')}
