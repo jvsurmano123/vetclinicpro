@@ -1,49 +1,55 @@
 'use client';
 
-import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/Button';
+import { useSession } from 'next-auth/react';
+import { Card } from '@/components/ui/card';
+import { usePatients } from '@/hooks/usePatients';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 export default function DashboardPage() {
-  const { session, status, logout } = useAuth();
-  const router = useRouter();
+  const { data: session } = useSession();
+  const { patients, loading, error, fetchPatients } = usePatients();
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-    }
-  }, [status, router]);
+    fetchPatients();
+  }, []);
 
-  if (status === 'loading') {
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );
   }
 
-  if (!session) {
-    return null;
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <Button variant="outline" onClick={logout}>
-              Sair
-            </Button>
-          </div>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">
+        Bem-vindo, {session?.user?.name || 'Usuário'}!
+      </h1>
 
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <p className="text-blue-700">
-              Bem-vindo, {session.user?.name || session.user?.email}!
-            </p>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-2">Total de Pacientes</h2>
+          <p className="text-3xl font-bold">{patients.length}</p>
+        </Card>
+
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-2">Consultas Hoje</h2>
+          <p className="text-3xl font-bold">0</p>
+        </Card>
+
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-2">Pacientes Novos (Mês)</h2>
+          <p className="text-3xl font-bold">0</p>
+        </Card>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Atividade Recente</h2>
+        <Card className="p-6">
+          <p className="text-gray-500">Nenhuma atividade recente</p>
+        </Card>
       </div>
     </div>
   );

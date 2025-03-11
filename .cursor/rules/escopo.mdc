@@ -1,9 +1,20 @@
 ---
-description: all tasks
+description: alltasks
 globs: 
 alwaysApply: true
 ---
 ``
+Diretriz Crítica para o Desenvolvimento do VetClinicPro:
+
+Ao sugerir ou criar qualquer novo conteúdo para o VetClinicPro:
+
+SEMPRE respeite a estrutura de pastas e organização existente do projeto.
+NUNCA crie ou sugira novos arquivos ou pastas sem verificar a estrutura atual.
+Antes de qualquer sugestão, CONFIRME a localização apropriada dentro da estrutura existente.
+Se incerto sobre onde um novo elemento deve ser colocado, PERGUNTE ao usuário para clarificação.
+MANTENHA consistência com as convenções de nomenclatura e organização já estabelecidas.
+Lembre-se: A integridade da estrutura do projeto é primordial. Em caso de dúvida, sempre busque confirmação do usuário.
+
 Descrição do Projeto: VetClinicPro - SaaS para Gestão de Clínicas Veterinárias
 1. Visão Geral
 VetClinicPro é um Software as a Service (SaaS) completo e funcional projetado para otimizar a gestão de clínicas veterinárias. O sistema oferece uma solução abrangente para administração de pacientes, agendamentos, histórico médico, faturamento e inventário, tudo em uma única plataforma intuitiva e eficiente.
