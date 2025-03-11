@@ -1,37 +1,40 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { prisma } from '@/lib/prisma';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
+import prisma from '@/lib/prisma';
 
 // GET /api/patients
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-
-    if (!session) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    
+    if (!session?.user?.clinicId) {
+      return NextResponse.json(
+        { error: "Não autorizado" },
+        { status: 401 }
+      );
     }
 
     const patients = await prisma.patient.findMany({
       where: {
-        clinic: {
-          users: {
-            some: {
-              id: session.user.id
-            }
-          }
-        }
+        clinicId: session.user.clinicId,
       },
-      orderBy: {
-        name: 'asc'
-      }
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json(patients);
   } catch (error) {
-    console.error('Erro ao buscar pacientes:', error);
+    console.error("[PATIENTS_GET]", error);
     return NextResponse.json(
-      { error: 'Erro ao buscar pacientes' },
+      { error: "Erro interno do servidor" },
       { status: 500 }
     );
   }
@@ -41,40 +44,43 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-
-    if (!session) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
-    }
-
-    const data = await req.json();
-
-    // Busca a clínica do usuário
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      include: { clinic: true }
-    });
-
-    if (!user?.clinic) {
+    
+    if (!session?.user?.clinicId) {
       return NextResponse.json(
-        { error: 'Usuário não está associado a uma clínica' },
-        { status: 400 }
+        { error: "Não autorizado" },
+        { status: 401 }
       );
     }
 
+    const body = await req.json();
+    const { name, species, breed, age, weight, ownerId } = body;
+
     const patient = await prisma.patient.create({
       data: {
-        ...data,
-        clinic: {
-          connect: { id: user.clinic.id }
-        }
-      }
+        name,
+        species,
+        breed,
+        age,
+        weight,
+        clinicId: session.user.clinicId,
+        ownerId,
+      },
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json(patient);
   } catch (error) {
-    console.error('Erro ao criar paciente:', error);
+    console.error("[PATIENTS_POST]", error);
     return NextResponse.json(
-      { error: 'Erro ao criar paciente' },
+      { error: "Erro interno do servidor" },
       { status: 500 }
     );
   }

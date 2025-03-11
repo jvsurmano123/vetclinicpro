@@ -1,17 +1,18 @@
+"use client";
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard,
-  Users,
   Calendar,
   FileText,
   Package,
-  DollarSign,
-  BarChart,
   Settings,
   LogOut,
-  User
+  User,
+  PawPrint,
+  Bell
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -22,82 +23,73 @@ import {
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 
-const menuItems = [
+const routes = [
   {
-    title: 'Dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
     href: '/app/dashboard',
-    icon: LayoutDashboard
   },
   {
-    title: 'Pacientes',
+    label: 'Pacientes',
+    icon: PawPrint,
     href: '/app/patients',
-    icon: Users
   },
   {
-    title: 'Agendamentos',
+    label: 'Agendamentos',
+    icon: Calendar,
     href: '/app/appointments',
-    icon: Calendar
   },
   {
-    title: 'Prontuários',
-    href: '/app/medical-records',
-    icon: FileText
-  },
-  {
-    title: 'Estoque',
+    label: 'Estoque',
+    icon: Package,
     href: '/app/inventory',
-    icon: Package
   },
   {
-    title: 'Financeiro',
-    href: '/app/billing',
-    icon: DollarSign
+    label: 'Prontuários',
+    icon: FileText,
+    href: '/app/medical-records',
   },
   {
-    title: 'Relatórios',
-    href: '/app/reports',
-    icon: BarChart
+    label: 'Alertas',
+    icon: Bell,
+    href: '/app/alerts',
   },
   {
-    title: 'Configurações',
+    label: 'Configurações',
+    icon: Settings,
     href: '/app/settings',
-    icon: Settings
-  }
+  },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col h-full bg-white border-r">
-      <div className="p-6">
-        <h1 className="text-2xl font-bold text-gray-900">VetClinicPro</h1>
+    <div className="space-y-4 py-4 flex flex-col h-full bg-gray-900 text-white">
+      <div className="px-3 py-2 flex-1">
+        <Link href="/app/dashboard" className="flex items-center pl-3 mb-14">
+          <h1 className="text-2xl font-bold">VetClinicPro</h1>
+        </Link>
+        <div className="space-y-1">
+          {routes.map((route) => (
+            <Link
+              key={route.href}
+              href={route.href}
+              className={cn(
+                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
+                pathname === route.href
+                  ? "text-white bg-white/10"
+                  : "text-zinc-400"
+              )}
+            >
+              <div className="flex items-center flex-1">
+                <route.icon className="h-5 w-5 mr-3" />
+                {route.label}
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
-      <nav className="flex-1 p-4">
-        <ul className="space-y-1">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
-
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                    isActive
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                  )}
-                >
-                  <Icon className="w-5 h-5" />
-                  {item.title}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
       <div className="p-4 border-t">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

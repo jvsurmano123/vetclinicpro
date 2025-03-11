@@ -1,94 +1,75 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { PatientList } from '@/components/patients/PatientList';
-import { PatientForm } from '@/components/patients/PatientForm';
-import { usePatients } from '@/hooks/usePatients';
-import { Loader2 } from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { PatientRegistrationForm } from "@/components/patients/PatientRegistrationForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "./columns";
+import { useQuery } from "@tanstack/react-query";
+
+interface Patient {
+  id: string;
+  name: string;
+  species: string;
+  breed?: string;
+  age?: number;
+  weight?: number;
+  owner: {
+    name: string;
+    email?: string;
+    phone?: string;
+  };
+}
 
 export default function PatientsPage() {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState<any>(null);
-  const { patients, loading, error, fetchPatients, createPatient, updatePatient, deletePatient } = usePatients();
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    fetchPatients();
-  }, []);
-
-  const handleSubmit = async (data: any) => {
-    try {
-      if (selectedPatient) {
-        await updatePatient(selectedPatient.id, data);
-      } else {
-        await createPatient(data);
+  const { data: patients, isLoading } = useQuery<Patient[]>({
+    queryKey: ["patients"],
+    queryFn: async () => {
+      const response = await fetch("/api/patients");
+      if (!response.ok) {
+        throw new Error("Erro ao carregar pacientes");
       }
-      handleCloseForm();
-    } catch (error) {
-      console.error('Erro ao salvar paciente:', error);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este paciente?')) {
-      try {
-        await deletePatient(id);
-      } catch (error) {
-        console.error('Erro ao deletar paciente:', error);
-      }
-    }
-  };
-
-  const handleEdit = (patient: any) => {
-    setSelectedPatient(patient);
-    setIsFormVisible(true);
-  };
-
-  const handleCloseForm = () => {
-    setSelectedPatient(null);
-    setIsFormVisible(false);
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-red-500">Erro ao carregar pacientes: {error}</p>
-      </div>
-    );
-  }
+      return response.json();
+    },
+  });
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Pacientes</h1>
-        {!isFormVisible && (
-          <Button onClick={() => setIsFormVisible(true)}>
-            Novo Paciente
-          </Button>
-        )}
+    <div className="container mx-auto py-10">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Pacientes</h1>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button>Novo Paciente</Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle>Cadastrar Novo Paciente</DialogTitle>
+              <DialogDescription>
+                Preencha os dados do tutor e do paciente para realizar o cadastro.
+              </DialogDescription>
+            </DialogHeader>
+            <PatientRegistrationForm />
+          </DialogContent>
+        </Dialog>
       </div>
 
-      {isFormVisible ? (
-        <PatientForm
-          patient={selectedPatient}
-          onSubmit={handleSubmit}
-          onCancel={handleCloseForm}
-        />
-      ) : (
-        <PatientList
-          patients={patients}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      )}
+      <div className="bg-white rounded-lg shadow">
+        {isLoading ? (
+          <div className="p-8 text-center">Carregando...</div>
+        ) : (
+          <DataTable columns={columns} data={patients || []} />
+        )}
+      </div>
     </div>
   );
 } 
