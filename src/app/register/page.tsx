@@ -1,14 +1,8 @@
 'use client';
 
-import { Metadata } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
-
-export const metadata: Metadata = {
-  title: "Registro - VetClinicPro",
-  description: "Crie sua conta no VetClinicPro",
-};
 
 export default function RegisterPage() {
   const { register, isLoading } = useRegister();
