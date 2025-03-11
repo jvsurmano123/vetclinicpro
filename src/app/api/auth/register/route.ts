@@ -1,33 +1,44 @@
 import { NextResponse } from 'next/server';
-import { hash } from 'bcryptjs';
-import { prisma } from '@/lib/prisma';
+import { hash } from 'bcrypt';
+import prisma from '@/lib/prisma';
 
 export async function POST(req: Request) {
   try {
-    const { email, password, name } = await req.json();
+    const body = await req.json();
+    const { email, password, clinicName } = body;
 
-    // Verifica se o usuário já existe
+    if (!email || !password || !clinicName) {
+      return new NextResponse('Dados incompletos', { status: 400 });
+    }
+
+    // Verifica se o email já está em uso
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: {
+        email,
+      },
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: 'Email já cadastrado' },
-        { status: 400 }
-      );
+      return new NextResponse('Email já cadastrado', { status: 400 });
     }
 
-    // Cria o hash da senha
+    // Cria a clínica
+    const clinic = await prisma.clinic.create({
+      data: {
+        name: clinicName,
+      },
+    });
+
+    // Hash da senha
     const hashedPassword = await hash(password, 12);
 
     // Cria o usuário
     const user = await prisma.user.create({
       data: {
         email,
-        name,
-        password: hashedPassword,
-        role: 'ADMIN', // Primeiro usuário será admin
+        hashedPassword,
+        clinicId: clinic.id,
+        role: 'ADMIN', // Primeiro usuário da clínica é admin
       },
     });
 
@@ -35,14 +46,11 @@ export async function POST(req: Request) {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        clinicId: user.clinicId,
       },
     });
   } catch (error) {
-    console.error('Erro ao registrar usuário:', error);
-    return NextResponse.json(
-      { error: 'Erro ao criar usuário' },
-      { status: 500 }
-    );
+    console.error('[REGISTER_ERROR]', error);
+    return new NextResponse('Erro interno', { status: 500 });
   }
 } 
