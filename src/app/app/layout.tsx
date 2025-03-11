@@ -19,7 +19,7 @@ import {
   HelpCircle,
   LogOut,
 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/Input';
 import Image from 'next/image';
 import Link from 'next/link';

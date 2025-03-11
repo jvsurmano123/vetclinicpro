@@ -59,7 +59,18 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update" && session?.user) {
+        // Buscar o usuário atualizado do banco
+        const updatedUser = await prisma.user.findUnique({
+          where: { email: token.email as string },
+          select: { clinicId: true }
+        });
+        return {
+          ...token,
+          clinicId: updatedUser?.clinicId
+        };
+      }
       if (user) {
         return {
           ...token,

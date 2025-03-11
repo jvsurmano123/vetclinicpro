@@ -20,8 +20,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -41,13 +40,13 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
+  role           String    @default("USER")
   clinicId       String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  accounts Account[]
-  sessions Session[]
-  clinic   Clinic?   @relation(fields: [clinicId], references: [id])
+  accounts       Account[]
+  sessions       Session[]
+  clinic         Clinic?   @relation(fields: [clinicId], references: [id])
 }
 
 model VerificationToken {
@@ -59,64 +58,60 @@ model VerificationToken {
 }
 
 model Clinic {
-  id        String   @id @default(cuid())
-  name      String
-  address   String?
-  phone     String?
-  email     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  users       User[]
-  patients    Patient[]
+  id           String        @id @default(cuid())
+  name         String
+  address      String?
+  phone        String?
+  email        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  alerts       Alert[]
   appointments Appointment[]
-  payments    Payment[]
-  alerts      Alert[]
+  patients     Patient[]
+  payments     Payment[]
+  users        User[]
 }
 
 model Patient {
-  id        String   @id @default(cuid())
-  name      String
-  species   String
-  breed     String?
-  age       Int?
-  weight    Float?
-  clinicId  String
-  ownerId   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  clinic       Clinic       @relation(fields: [clinicId], references: [id])
-  owner        Owner        @relation(fields: [ownerId], references: [id])
+  id           String        @id @default(cuid())
+  name         String
+  species      String
+  breed        String?
+  age          Int?
+  weight       Float?
+  clinicId     String
+  ownerId      String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   appointments Appointment[]
+  owner        Owner         @relation(fields: [ownerId], references: [id])
+  clinic       Clinic        @relation(fields: [clinicId], references: [id])
 }
 
 model Owner {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
   email     String?
   phone     String?
   address   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  patients Patient[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  patients  Patient[]
 }
 
 model Appointment {
-  id          String   @id @default(cuid())
-  date        DateTime
-  type        String
-  status      String
-  notes       String?
-  clinicId    String
-  patientId   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  clinic      Clinic   @relation(fields: [clinicId], references: [id])
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  payment     Payment?
+  id        String   @id @default(cuid())
+  date      DateTime
+  type      String
+  status    String
+  notes     String?
+  clinicId  String
+  patientId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  clinic    Clinic   @relation(fields: [clinicId], references: [id])
+  payment   Payment?
 }
 
 model Payment {
@@ -127,9 +122,8 @@ model Payment {
   clinicId      String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-
-  clinic      Clinic      @relation(fields: [clinicId], references: [id])
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  clinic        Clinic      @relation(fields: [clinicId], references: [id])
 }
 
 model Alert {
@@ -140,6 +134,5 @@ model Alert {
   clinicId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   clinic    Clinic   @relation(fields: [clinicId], references: [id])
 }
