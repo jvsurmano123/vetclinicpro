@@ -9,8 +9,18 @@ import {
   Package,
   DollarSign,
   BarChart,
-  Settings
+  Settings,
+  LogOut,
+  User
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 
 const menuItems = [
   {
@@ -88,6 +98,22 @@ export function Sidebar() {
           })}
         </ul>
       </nav>
+      <div className="p-4 border-t">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="w-full justify-start gap-2">
+              <User className="h-5 w-5" />
+              <span>Minha Conta</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem onClick={() => signOut()}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Sair</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 } 

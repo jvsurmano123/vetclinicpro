@@ -17,12 +17,20 @@ import {
   BarChart2,
   Package,
   HelpCircle,
+  LogOut,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
 
 const sidebarLinks = [
   { icon: Home, label: 'Dashboard', href: '/app/dashboard' },
@@ -78,29 +86,39 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
           {/* User Profile */}
           <div className="border-t border-gray-100 p-4">
-            <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50">
-              <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden">
-                {session?.user?.image ? (
-                  <Image
-                    src={session.user.image}
-                    alt={session.user.name || 'User'}
-                    width={32}
-                    height={32}
-                  />
-                ) : (
-                  <div className="h-full w-full bg-indigo-600" />
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  {session?.user?.name || 'Usuário'}
-                </p>
-                <p className="text-xs text-gray-500 truncate">
-                  {session?.user?.email || 'usuario@email.com'}
-                </p>
-              </div>
-              <ChevronDown className="h-4 w-4 text-gray-400" />
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="w-full">
+                <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50">
+                  <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden">
+                    {session?.user?.image ? (
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || 'User'}
+                        width={32}
+                        height={32}
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-indigo-600" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {session?.user?.name || 'Usuário'}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {session?.user?.email || 'usuario@email.com'}
+                    </p>
+                  </div>
+                  <ChevronDown className="h-4 w-4 text-gray-400" />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => signOut()}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sair da conta</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </aside>

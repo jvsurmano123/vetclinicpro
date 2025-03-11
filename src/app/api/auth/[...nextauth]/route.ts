@@ -23,11 +23,11 @@ export const authOptions: AuthOptions = {
           }
         });
 
-        if (!user || !user.password) {
+        if (!user || !user.hashedPassword) {
           throw new Error("Usuário não encontrado");
         }
 
-        const isValid = await compare(credentials.password, user.password);
+        const isValid = await compare(credentials.password, user.hashedPassword);
 
         if (!isValid) {
           throw new Error("Senha incorreta");
