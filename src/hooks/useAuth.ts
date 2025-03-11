@@ -21,9 +21,24 @@ export const useAuth = () => {
       }
 
       if (result?.ok) {
-        await update(); // Atualiza a sessão
-        router.push("/app/dashboard");
-        router.refresh(); // Força atualização da página
+        // Atualiza a sessão e aguarda
+        await update();
+        
+        // Busca a sessão atualizada
+        const response = await fetch('/api/auth/session');
+        const sessionData = await response.json();
+        
+        console.log('DEBUG - Sessão após login:', sessionData);
+        
+        // Verifica se tem clinicId na sessão
+        if (sessionData.user?.clinicId) {
+          console.log('DEBUG - Tem clinicId, indo para dashboard');
+          await router.push("/app/dashboard");
+        } else {
+          console.log('DEBUG - Não tem clinicId, indo para registro');
+          await router.push("/register-clinic");
+        }
+        
         return { success: true };
       }
 
@@ -38,7 +53,6 @@ export const useAuth = () => {
     try {
       await signOut({ redirect: false });
       router.push("/login");
-      router.refresh(); // Força atualização da página
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
     }
@@ -50,6 +64,6 @@ export const useAuth = () => {
     isAuthenticated: status === "authenticated",
     isLoading: status === "loading",
     login,
-    logout,
+    logout
   };
 }; 
