@@ -3,6 +3,7 @@ description: all tasks
 globs: 
 alwaysApply: true
 ---
+Usar shadcn, tailwind css e outras bibliotecas para criar componentes da dashboard da aplicação
 
 src/
 │

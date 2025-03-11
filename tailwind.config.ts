@@ -6,6 +6,14 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    {
+      pattern: /^bg-(indigo|rose|cyan|emerald|blue|green|yellow)-(50|100|500|600)$/,
+    },
+    {
+      pattern: /^text-(indigo|rose|cyan|emerald|blue|green|yellow)-(500|600)$/,
+    },
+  ],
   theme: {
     container: {
       center: true,
@@ -48,6 +56,30 @@ const config: Config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        indigo: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          500: '#6366f1',
+          600: '#4f46e5',
+        },
+        rose: {
+          50: '#fff1f2',
+          100: '#ffe4e6',
+          500: '#f43f5e',
+          600: '#e11d48',
+        },
+        cyan: {
+          50: '#ecfeff',
+          100: '#cffafe',
+          500: '#06b6d4',
+          600: '#0891b2',
+        },
+        emerald: {
+          50: '#ecfdf5',
+          100: '#d1fae5',
+          500: '#10b981',
+          600: '#059669',
         },
       },
       borderRadius: {

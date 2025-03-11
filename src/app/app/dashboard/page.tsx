@@ -4,8 +4,21 @@ import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/card';
 import { usePatients } from '@/hooks/usePatients';
 import { useEffect } from 'react';
-import { Loader2, Users, Calendar, Bug, ChevronDown, Plus, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+import { 
+  Loader2, 
+  Users, 
+  Calendar, 
+  Bug, 
+  ChevronDown, 
+  Plus, 
+  CheckCircle2, 
+  Clock, 
+  AlertCircle,
+  ArrowUpRight,
+  ArrowDownRight
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { LineChart } from '@/components/charts/LineChart';
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -23,157 +36,152 @@ export default function DashboardPage() {
     );
   }
 
+  const stats = [
+    {
+      title: 'Total de Projetos',
+      value: '23',
+      change: '+32.54%',
+      trend: 'up',
+      icon: Users,
+      color: 'indigo'
+    },
+    {
+      title: 'Total de Tarefas',
+      value: '23',
+      change: '-12.54%',
+      trend: 'down',
+      icon: Calendar,
+      color: 'rose'
+    },
+    {
+      title: 'Total de Bugs',
+      value: '23',
+      change: '+32.54%',
+      trend: 'up',
+      icon: Bug,
+      color: 'cyan'
+    },
+    {
+      title: 'Total de Usuários',
+      value: '23',
+      change: '+32.54%',
+      trend: 'up',
+      icon: Users,
+      color: 'emerald'
+    }
+  ];
+
+  const tasks = [
+    {
+      title: 'Em Andamento',
+      value: 45,
+      icon: Clock,
+      color: 'blue'
+    },
+    {
+      title: 'Completas',
+      value: 75,
+      icon: CheckCircle2,
+      color: 'green'
+    },
+    {
+      title: 'Pendentes',
+      value: 25,
+      icon: AlertCircle,
+      color: 'yellow'
+    }
+  ];
+
   return (
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
             <p className="text-sm text-gray-500">Dashboard / Projetos</p>
-            <h1 className="text-2xl font-semibold mt-1">Dashboard</h1>
+            <h1 className="text-2xl font-semibold text-gray-900 mt-1">Dashboard</h1>
           </div>
           <div className="flex items-center gap-4">
             <Button variant="outline" className="flex items-center gap-2">
               Último Mês <ChevronDown className="h-4 w-4" />
             </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2">
               <Plus className="h-4 w-4" /> Nova Tarefa
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6 bg-white shadow-sm">
-            <div className="flex items-center gap-4">
-              <div className="bg-blue-100 p-3 rounded-lg">
-                <Users className="h-6 w-6 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Total de Pacientes</p>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-2xl font-bold">{patients.length}</h3>
-                  <span className="text-xs text-green-500 bg-green-50 px-2 py-1 rounded-full">
-                    +32.54%
-                  </span>
+          {stats.map((stat, index) => (
+            <Card key={index} className="p-6 bg-white shadow-sm">
+              <div className="flex items-center gap-4">
+                <div className={`bg-${stat.color}-100 p-3 rounded-lg`}>
+                  <stat.icon className={`h-6 w-6 text-${stat.color}-600`} />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">{stat.title}</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
+                    <span className={`text-xs ${
+                      stat.trend === 'up' ? 'text-green-500 bg-green-50' : 'text-red-500 bg-red-50'
+                    } px-2 py-1 rounded-full flex items-center gap-1`}>
+                      {stat.trend === 'up' ? (
+                        <ArrowUpRight className="h-3 w-3" />
+                      ) : (
+                        <ArrowDownRight className="h-3 w-3" />
+                      )}
+                      {stat.change}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-white shadow-sm">
-            <div className="flex items-center gap-4">
-              <div className="bg-orange-100 p-3 rounded-lg">
-                <Calendar className="h-6 w-6 text-orange-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Total de Consultas</p>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-2xl font-bold">23</h3>
-                  <span className="text-xs text-red-500 bg-red-50 px-2 py-1 rounded-full">
-                    -12.54%
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-white shadow-sm">
-            <div className="flex items-center gap-4">
-              <div className="bg-cyan-100 p-3 rounded-lg">
-                <Bug className="h-6 w-6 text-cyan-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Total de Bugs</p>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-2xl font-bold">23</h3>
-                  <span className="text-xs text-green-500 bg-green-50 px-2 py-1 rounded-full">
-                    +32.54%
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-white shadow-sm">
-            <div className="flex items-center gap-4">
-              <div className="bg-green-100 p-3 rounded-lg">
-                <Users className="h-6 w-6 text-green-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Total de Usuários</p>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-2xl font-bold">23</h3>
-                  <span className="text-xs text-green-500 bg-green-50 px-2 py-1 rounded-full">
-                    +32.54%
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Card>
+            </Card>
+          ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="p-6 bg-white shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h2 className="text-lg font-semibold">Visão Geral do Projeto</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Visão Geral do Projeto</h2>
                 <p className="text-sm text-gray-500 mt-1">Crescimento de Last 6 Month Projects</p>
               </div>
               <Button variant="outline" className="flex items-center gap-2 text-sm py-1">
                 Último Mês <ChevronDown className="h-4 w-4" />
               </Button>
             </div>
-            <div className="h-[300px] flex items-center justify-center text-gray-500">
-              Gráfico de Visão Geral será implementado aqui
+            <div className="h-[300px]">
+              <LineChart />
             </div>
           </Card>
 
           <Card className="p-6 bg-white shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h2 className="text-lg font-semibold">Status das Tarefas</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Status das Tarefas</h2>
                 <p className="text-sm text-gray-500 mt-1">54 tarefas neste mês</p>
               </div>
               <Button variant="outline" className="flex items-center gap-2 text-sm py-1">
                 Hoje <ChevronDown className="h-4 w-4" />
               </Button>
             </div>
-            <div className="space-y-4">
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-blue-600" />
-                    <span className="text-gray-500">Em Andamento</span>
+            <div className="space-y-6">
+              {tasks.map((task, index) => (
+                <div key={index} className="flex flex-col gap-2">
+                  <div className="flex justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <task.icon className={`h-4 w-4 text-${task.color}-600`} />
+                      <span className="text-gray-500">{task.title}</span>
+                    </div>
+                    <span className="text-gray-900 font-medium">{task.value}%</span>
                   </div>
-                  <span className="text-gray-900 font-medium">45%</span>
-                </div>
-                <div className="h-2 bg-gray-100 rounded-full">
-                  <div className="h-full w-[45%] bg-blue-600 rounded-full"></div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
-                    <span className="text-gray-500">Completas</span>
+                  <div className="h-2 bg-gray-100 rounded-full">
+                    <div 
+                      className={`h-full bg-${task.color}-500 rounded-full`}
+                      style={{ width: `${task.value}%` }}
+                    />
                   </div>
-                  <span className="text-gray-900 font-medium">75%</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full">
-                  <div className="h-full w-[75%] bg-green-500 rounded-full"></div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-yellow-600" />
-                    <span className="text-gray-500">Pendentes</span>
-                  </div>
-                  <span className="text-gray-900 font-medium">25%</span>
-                </div>
-                <div className="h-2 bg-gray-100 rounded-full">
-                  <div className="h-full w-[25%] bg-yellow-500 rounded-full"></div>
-                </div>
-              </div>
+              ))}
             </div>
           </Card>
         </div>
